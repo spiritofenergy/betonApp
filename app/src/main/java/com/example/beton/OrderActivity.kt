@@ -1,5 +1,6 @@
 package com.example.beton
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.math.roundToInt
 
 class OrderActivity : AppCompatActivity() {
@@ -25,8 +27,9 @@ class OrderActivity : AppCompatActivity() {
     private lateinit var deliveryCheck: CheckBox
     private lateinit var seekBar: SeekBar
     private lateinit var chooseType: GridView
-    private lateinit var typeOrder: GridView
+    private lateinit var typeOrder: ExpandedGridView
     private lateinit var payment: GridView
+    private lateinit var fab: FloatingActionButton
 
     private lateinit var priceOne: LinearLayout
     private lateinit var priceOneText: TextView
@@ -36,6 +39,10 @@ class OrderActivity : AppCompatActivity() {
     private var priceDelivery: Int = 0
     private var priceDeliverySum: Int = 0
     private var countTotal: Int = 0
+    private var paymentVariant: Int = -1
+    private lateinit var typeProduct: String
+    private lateinit var product: String
+    private var deliv = false
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,14 +67,63 @@ class OrderActivity : AppCompatActivity() {
         priceOne = findViewById(R.id.priceOne)
         priceOneText = findViewById(R.id.priceOneText)
         payment = findViewById(R.id.payment)
+        fab = findViewById(R.id.fab)
+
+        fab.setOnClickListener {
+            if (isOrderAll()) {
+                val intent = Intent(
+                    this,
+                    ConfirmActivity::class.java
+                )
+
+                intent.putExtra("address", chosenAddress)
+                intent.putExtra("paymentVariant", paymentVariant)
+                intent.putExtra("priceAllOrder", priceAllOrder)
+                intent.putExtra("deliv", deliv)
+                intent.putExtra("product", product)
+                intent.putExtra("countTotal", countTotal)
+
+                startActivity(intent)
+            } else {
+                Toast.makeText(baseContext, "Заказ не полон.",
+                    Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+        typeOrder.setExpanded(true)
+
+        var nPrevSelChooseType = -1
+        var nPrevSelTypeOrder = -1
+        var nPrevSelPayment = -1
 
         val gridPaymentAdapter = GridAdapter(this, paymentArr)
         payment.adapter = gridPaymentAdapter
 
+        payment.onItemClickListener = AdapterView.OnItemClickListener { _, view, position, _ ->
+            if (nPrevSelPayment != -1) {
+                val viewPrev = payment.getChildAt(nPrevSelPayment) as View
+                viewPrev.background = ContextCompat.getDrawable(this, R.drawable.border_item)
+            }
+
+            nPrevSelPayment = position
+            if (nPrevSelPayment == position) {
+                view.background = ContextCompat.getDrawable(this, R.drawable.border_item_selected)
+            }
+
+            when(payment.getItemAtPosition(position).toString()) {
+                paymentArr[0] -> {
+                    paymentVariant = 0
+                }
+                paymentArr[1] -> {
+                    paymentVariant = 1
+                }
+            }
+        }
+
         val gridAdapter = GridAdapter(this, types)
         chooseType.adapter = gridAdapter
-        var nPrevSelChooseType = -1
-        var nPrevSelTypeOrder = -1
+
         chooseType.onItemClickListener = AdapterView.OnItemClickListener { _, view, position, _ ->
             if (nPrevSelChooseType != -1) {
                 val viewPrev = chooseType.getChildAt(nPrevSelChooseType) as View
@@ -79,7 +135,9 @@ class OrderActivity : AppCompatActivity() {
                 view.background = ContextCompat.getDrawable(this, R.drawable.border_item_selected)
             }
 
-            when(chooseType.getItemAtPosition(position).toString()) {
+            typeProduct = chooseType.getItemAtPosition(position).toString()
+
+            when(typeProduct) {
                 types[0] -> {
                     val gridTypeAdapter = GridAdapter(this, beton)
                     typeOrder.adapter = gridTypeAdapter
@@ -105,7 +163,9 @@ class OrderActivity : AppCompatActivity() {
 
             priceOne.visibility = View.VISIBLE
 
-            when(typeOrder.getItemAtPosition(position).toString()) {
+            product = typeOrder.getItemAtPosition(position).toString()
+
+            when(product) {
                 beton[0] -> {
                     priceOneText.text = "3110 ₽/м³"
                     priceOrder = 3110
@@ -172,12 +232,14 @@ class OrderActivity : AppCompatActivity() {
             }
         })
 
-        deliveryCheck.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
+        deliveryCheck.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, b ->
             if (b) {
+                deliv = b
                 priceDelivery = priceDeliverySum
                 priceAllOrder = priceOrder * countTotal + priceDelivery
                 priceAll.text = "${priceAllOrder} ₽"
             } else {
+                deliv = b
                 priceDelivery = 0
                 priceAllOrder = priceOrder * countTotal - priceDelivery
                 priceAll.text = "${priceAllOrder} ₽"
@@ -207,5 +269,9 @@ class OrderActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun isOrderAll() : Boolean {
+        return chosenAddress.isNotEmpty() && countTotal != 0 && paymentVariant != -1 && product.isNotEmpty() && typeProduct.isNotEmpty()
     }
 }

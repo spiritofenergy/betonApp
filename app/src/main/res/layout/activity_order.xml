@@ -14,7 +14,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="#FFFFFF">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -200,7 +201,7 @@
                     android:stretchMode="columnWidth"
                     android:verticalSpacing="5dp" />
 
-                <GridView
+                <com.example.beton.ExpandedGridView
                     android:id="@+id/typeOrder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -219,7 +220,7 @@
                     android:stretchMode="columnWidth"
                     android:verticalSpacing="5dp">
 
-                </GridView>
+                </com.example.beton.ExpandedGridView>
 
                 <GridView
                     android:id="@+id/payment"
@@ -236,6 +237,7 @@
                     android:columnWidth="130dp"
                     android:horizontalSpacing="5dp"
                     android:numColumns="2"
+                    android:scrollbars="none"
                     android:stretchMode="columnWidth"
                     android:verticalSpacing="5dp">
 
@@ -284,7 +286,7 @@
             </LinearLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/floatingActionButton2"
+                android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

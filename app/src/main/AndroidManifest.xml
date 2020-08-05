@@ -14,9 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ConfirmActivity"
+            android:label="Подтверждение заказа"
+            android:theme="@style/SettingTheme"></activity>
+        <activity android:name=".OrderedActivity" />
+        <activity
             android:name=".OrderActivity"
-            android:theme="@style/SettingTheme"
-            android:label="Настройка заказа" />
+            android:label="Настройка заказа"
+            android:theme="@style/SettingTheme" />
         <activity
             android:name=".SettingsActivity"
             android:label="Настройки приложения"

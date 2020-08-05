@@ -8,7 +8,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1002810921999:android:1bf07da2fc69513bf5ff7a",
+        "mobilesdk_app_id": "1:1002810921999:android:44c54e08f500efa2f5ff7a",
         "android_client_info": {
           "package_name": "com.example.beton"
         }
@@ -19,6 +19,43 @@
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.beton",
+            "certificate_hash": "3032f9fed10f1028b9719427681454ba546963b0"
+          }
+        },
+        {
+          "client_id": "1002810921999-2cf45o1lt1tiuo056iuvng9730qll1hl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0iJ8N4jFS0-zwNAq5nhyJDC0X6Hm863g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1002810921999-2cf45o1lt1tiuo056iuvng9730qll1hl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002810921999:android:4a760fb77708b40bf5ff7a",
+        "android_client_info": {
+          "package_name": "com.example.betonadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002810921999-9r56kri3ftif3t8o4qaam3iljtt8f5nl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.betonadmin",
             "certificate_hash": "3032f9fed10f1028b9719427681454ba546963b0"
           }
         },
