@@ -1,4 +1,4 @@
-package com.example.betonadmin
+package com.example.beton
 
 class DateTime {
     var year: Int = 0

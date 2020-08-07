@@ -1,4 +1,4 @@
-package com.example.betonadmin.ui.home
+package com.example.beton.ui.orders
 
 import android.os.Bundle
 import android.util.Log
@@ -7,21 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import com.example.betonadmin.HomeActivity
-import com.example.betonadmin.Order
-import com.example.betonadmin.OrdersAdapter
-import com.example.betonadmin.R
+import androidx.recyclerview.widget.RecyclerView
+import com.example.beton.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import org.w3c.dom.Text
+import java.sql.Array
 
-class HomeFragment : Fragment() {
+class OrdersFragment : Fragment() {
     private lateinit var database: FirebaseFirestore
-
+    private lateinit var auth: FirebaseAuth
     private lateinit var ordersList: MutableList<Order>
 
     private lateinit var home: HomeActivity
@@ -35,18 +33,20 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
+        val root = inflater.inflate(R.layout.fragment_orders, container, false)
 
         if (activity != null) {
             home = activity as HomeActivity
         }
 
         database = Firebase.firestore
+        auth = Firebase.auth
 
         ordersList = mutableListOf()
         ordersListView = root.findViewById(R.id.orders)
         countOrders = root.findViewById(R.id.countOrders)
         sortBySpin = root.findViewById(R.id.sort_by_spin)
+
 
         val spinAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
             home,
@@ -90,6 +90,7 @@ class HomeFragment : Fragment() {
         }
 
         database.collection("orders")
+            .whereEqualTo("user", auth.currentUser?.uid)
             .get()
             .addOnSuccessListener { documents ->
                 val size = documents.size()
@@ -113,7 +114,6 @@ class HomeFragment : Fragment() {
                     order.datetime.hour = (list["hour"] as Long).toInt()
                     order.datetime.minute = (list["minute"] as Long).toInt()
                     order.id = document.data["id"].toString()
-                    order.uid = document.data["user"].toString()
 
                     ordersList.add(order)
 
@@ -130,7 +130,7 @@ class HomeFragment : Fragment() {
 
                 val ordersAdapter = OrdersAdapter(home, ordersList)
                 ordersListView.adapter = ordersAdapter
-            }
+            } 
             .addOnFailureListener { exception ->
                 Log.w("home", "Ошибка получения заказов.", exception)
             }

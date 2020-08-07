@@ -1,4 +1,4 @@
-package com.example.betonadmin
+package com.example.beton
 
 class Order {
     var address: String? = null
@@ -9,5 +9,4 @@ class Order {
     var datetime: DateTime = DateTime()
     var status: String = "В обработке"
     var id: String? = null
-    var uid: String? = null
 }

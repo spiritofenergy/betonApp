@@ -6,8 +6,33 @@
     app:startDestination="@+id/nav_home">
 
     <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.beton.ui.profile.ProfileFragment"
+        android:label="Мой профиль"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.betonadmin.ui.home.HomeFragment"
-        android:label="Текущие заказы"
+        android:name="com.example.beton.ui.home.HomeFragment"
+        android:label="Новый заказ"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_orders"
+        android:name="com.example.beton.ui.orders.OrdersFragment"
+        android:label="Мои заказы"
+        tools:layout="@layout/fragment_orders" />
+
+    <fragment
+        android:id="@+id/nav_contact"
+        android:name="com.example.beton.ui.contact.ContactFragment"
+        android:label="Контакты"
+        tools:layout="@layout/fragment_contact" />
+
+    <fragment
+        android:id="@+id/nav_setting"
+        android:name="com.example.beton.ui.setting.SettingFragment"
+        android:label="Настройки"
+        tools:layout="@layout/fragment_setting" />
+
 </navigation>

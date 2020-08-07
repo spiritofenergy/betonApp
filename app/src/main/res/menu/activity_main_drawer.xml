@@ -6,12 +6,25 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_baseline_home_24"
-            android:title="Заказы" />
+            android:icon="@drawable/ic_baseline_add_black_24"
+            android:title="Новый заказ" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_baseline_account_box_24"
+            android:title="Мой профиль" />
+        <item
+            android:id="@+id/nav_orders"
+            android:icon="@drawable/ic_baseline_bookmark_border_24"
+            android:title="Мои заказы" />
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_baseline_settings_24"
+            android:title="Настройки" />
         <item
             android:id="@+id/sign_out_right"
             android:icon="@drawable/ic_baseline_exit_to_app_24"
             android:onClick="signOut"
             android:title="Выйти" />
     </group>
+
 </menu>

@@ -1,4 +1,4 @@
-package com.example.betonadmin
+package com.example.beton
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -47,12 +47,10 @@ class SignInActivity : AppCompatActivity() {
         }
 
         signUpButton.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    RegisterActivity::class.java
-                )
-            )
+            startActivity(Intent(
+                this,
+                RegisterActivity::class.java
+            ))
         }
     }
 
@@ -63,34 +61,10 @@ class SignInActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("login", "signInWithEmail:success")
                     val user = auth.currentUser
-                    var root: String? = null
-                    database.collection("users")
-                        .whereEqualTo("uid", user?.uid)
-                        .get()
-                        .addOnSuccessListener { documents ->
-                            for (document in documents) {
-                                root = document.data["root"].toString()
-
-                                if (root == "admin") {
-                                    startActivity(
-                                        Intent(
-                                            this,
-                                            HomeActivity::class.java
-                                        )
-                                    )
-                                } else {
-                                    Firebase.auth.signOut()
-                                    Toast.makeText(
-                                        baseContext,
-                                        "Access is denied!",
-                                        Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                        }
-                        .addOnFailureListener { exception ->
-                            Log.w("home", "Error getting documents: ", exception)
-                        }
-
+                    startActivity(Intent(
+                        this,
+                        HomeActivity::class.java
+                    ))
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("login", "signInWithEmail:failure", task.exception)
