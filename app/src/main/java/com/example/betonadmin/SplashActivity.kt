@@ -1,4 +1,4 @@
-package com.example.beton
+package com.example.betonadmin
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -15,13 +15,11 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-
         auth = Firebase.auth
-
 
         Thread {
             try {
-                Thread.sleep(1000)
+                Thread.sleep(1500)
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {

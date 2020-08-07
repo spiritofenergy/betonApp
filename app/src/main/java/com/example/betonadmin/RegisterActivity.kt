@@ -1,4 +1,4 @@
-package com.example.beton
+package com.example.betonadmin
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,9 +11,6 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -60,8 +57,8 @@ class RegisterActivity : AppCompatActivity() {
         logInButton.setOnClickListener {
             startActivity(
                 Intent(
-                this,
-                SignInActivity::class.java
+                    this,
+                    SignInActivity::class.java
                 )
             )
         }
@@ -96,10 +93,12 @@ class RegisterActivity : AppCompatActivity() {
                             Log.d("Register", "createUserWithEmail:success")
                             val user = auth.currentUser
                             addUserToDatabase(user);
-                            startActivity(Intent(
+                            startActivity(
+                                Intent(
                                 this,
                                 HomeActivity::class.java
-                            ))
+                            )
+                            )
                         } else {
                             Log.w("Register", "createUserWithEmail:failure", task.exception)
                             Toast.makeText(
@@ -119,7 +118,7 @@ class RegisterActivity : AppCompatActivity() {
             "uid" to currentUser?.uid.toString().trim(),
             "email" to currentUser?.email.toString().trim(),
             "name" to nameRegister.text.toString().trim(),
-            "root" to "user"
+            "root" to "admin"
         )
 
         database.collection("users")

@@ -1,4 +1,4 @@
-package com.example.beton
+package com.example.betonadmin
 
 import org.junit.Test
 
