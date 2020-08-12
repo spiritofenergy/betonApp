@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
@@ -42,6 +43,7 @@ class ConfirmActivity : AppCompatActivity() {
     private lateinit var product: String
     private lateinit var address: String
     private var deliv = false
+    private var user: User = User()
 
     private lateinit var database: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
@@ -52,6 +54,19 @@ class ConfirmActivity : AppCompatActivity() {
 
         database = Firebase.firestore
         auth = Firebase.auth
+
+        database.collection("users")
+            .whereEqualTo("uid", auth.currentUser?.uid)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    user.name = document.data["name"].toString()
+                    user.email = document.data["email"].toString()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("home", "Error getting documents: ", exception)
+            }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -150,8 +165,9 @@ class ConfirmActivity : AppCompatActivity() {
             "price" to priceAllOrder,
             "delivery" to deliv,
             "paymentVariant" to paymentVariant,
-            "status" to "В обработке",
-            "user" to currentUser?.uid,
+            "status" to 0,
+            "user" to user,
+            "uid" to auth.currentUser?.uid,
             "time" to now(),
             "id" to UUID.randomUUID().toString()
         )

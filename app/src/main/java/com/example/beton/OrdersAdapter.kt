@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 
 class OrdersAdapter(ctx: Context, types: List<Order>) : BaseAdapter() {
     private val listData: List<Order> = types
@@ -34,9 +35,21 @@ class OrdersAdapter(ctx: Context, types: List<Order>) : BaseAdapter() {
             Log.d("id", idText.text.toString())
 
         }
-
+        val arrStatus = context.resources.getStringArray(R.array.status)
         priceTextView.text = "${listData[position].price}  ₽"
-        status.text = listData[position].status
+        status.text = arrStatus[listData[position].status]
+        status.background = when (listData[position].status) {
+            0 -> {
+                ContextCompat.getDrawable(context, R.drawable.border_item)
+            }
+            1 -> {
+                ContextCompat.getDrawable(context, R.drawable.border_item_1)
+            }
+            2 -> {
+                ContextCompat.getDrawable(context, R.drawable.border_item_2)
+            }
+            else -> {ContextCompat.getDrawable(context, R.drawable.border_item)}
+        }
         address.text = listData[position].address
         countTextView.text = "${listData[position].count} м³"
         product.text = listData[position].product

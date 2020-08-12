@@ -1,6 +1,7 @@
 package com.example.beton.ui.orders
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.beton.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -27,13 +29,17 @@ class OrdersFragment : Fragment() {
     private lateinit var ordersListView: ListView
     private lateinit var countOrders: TextView
     private lateinit var sortBySpin: Spinner
+    private lateinit var refreshLayout: SwipeRefreshLayout
+    private lateinit var handler: Handler
+    private lateinit var runnable: Runnable
+    private lateinit var root: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_orders, container, false)
+        root = inflater.inflate(R.layout.fragment_orders, container, false)
 
         if (activity != null) {
             home = activity as HomeActivity
@@ -41,11 +47,30 @@ class OrdersFragment : Fragment() {
 
         database = Firebase.firestore
         auth = Firebase.auth
+        handler = Handler()
 
         ordersList = mutableListOf()
         ordersListView = root.findViewById(R.id.orders)
         countOrders = root.findViewById(R.id.countOrders)
         sortBySpin = root.findViewById(R.id.sort_by_spin)
+        refreshLayout = root.findViewById(R.id.reload_orders)
+
+        refreshLayout.setOnRefreshListener {
+            // Initialize a new Runnable
+            runnable = Runnable {
+                // Update the text view text with a random number
+                ordersList.clear()
+                getOrders()
+
+                // Hide swipe to refresh icon animation
+                refreshLayout.isRefreshing = false
+            }
+
+            // Execute the task after specified time
+            handler.postDelayed(
+                runnable, 3000.toLong()
+            )
+        }
 
 
         val spinAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
@@ -89,8 +114,16 @@ class OrdersFragment : Fragment() {
 
         }
 
+
+        getOrders()
+
+
+        return root
+    }
+
+    private fun getOrders() {
         database.collection("orders")
-            .whereEqualTo("user", auth.currentUser?.uid)
+            .whereEqualTo("uid", auth.currentUser?.uid)
             .get()
             .addOnSuccessListener { documents ->
                 val size = documents.size()
@@ -106,7 +139,7 @@ class OrdersFragment : Fragment() {
                     order.price = (document.data["price"] as Long).toInt()
                     order.delivery = document.data["delivery"] as Boolean
                     order.address = document.data["address"].toString()
-                    order.status = document.data["status"].toString()
+                    order.status = (document.data["status"] as Long).toInt()
                     val list = document.data["time"] as Map<*, *>
                     order.datetime.year = (list["year"] as Long).toInt()
                     order.datetime.month = (list["monthValue"] as Long).toInt()
@@ -130,13 +163,9 @@ class OrdersFragment : Fragment() {
 
                 val ordersAdapter = OrdersAdapter(home, ordersList)
                 ordersListView.adapter = ordersAdapter
-            } 
+            }
             .addOnFailureListener { exception ->
                 Log.w("home", "Ошибка получения заказов.", exception)
             }
-
-
-
-        return root
     }
 }

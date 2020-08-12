@@ -21,6 +21,9 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -41,6 +44,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var nameNav: TextView
     private lateinit var emailNav: TextView
     private lateinit var photoNav: ImageView
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +52,13 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -136,6 +147,7 @@ class HomeActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.sign_out_right -> {
                 Firebase.auth.signOut()
+                mGoogleSignInClient.revokeAccess()
                 startActivity(Intent(this, SignInActivity::class.java))
             }
             else -> {

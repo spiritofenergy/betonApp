@@ -64,14 +64,23 @@
 
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/orders"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/reload_orders"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/orders_top"
-            android:clickable="false"
-            android:divider="@android:color/transparent"
-            android:focusable="auto" />
+            android:layout_height="match_parent"
+            android:layout_below="@id/orders_top">
+
+            <ListView
+                android:id="@+id/orders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:divider="@android:color/transparent"
+                android:focusable="auto" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
 
         <TextView
             android:id="@+id/orders_null"

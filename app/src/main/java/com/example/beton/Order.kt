@@ -7,6 +7,6 @@ class Order {
     var delivery: Boolean = false
     var price: Int? = null
     var datetime: DateTime = DateTime()
-    var status: String = "В обработке"
+    var status: Int = 0
     var id: String? = null
 }

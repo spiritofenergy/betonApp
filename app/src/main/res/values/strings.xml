@@ -63,4 +63,10 @@
         <item>цене</item>
         <item>статусу</item>
     </string-array>
+    <string-array name="status">
+        <item>В обработке</item>
+        <item>В пути</item>
+        <item>Завершено</item>
+    </string-array>
+
 </resources>
